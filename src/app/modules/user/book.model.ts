@@ -3,23 +3,12 @@ import { IBook, UserModel } from './book.interface';
 
 const userSchema = new Schema<IBook>(
   {
-    title: {
-      type: String,
-      required: true,
-    },
-    author: {
-      type: String,
-      required: true,
-    },
-    genre: {
-      unique: true,
-      type: String,
-      required: true,
-    },
-    publicationDate: {
-      type: String,
-      require: true,
-    },
+    user: { type: String },
+    title: { type: String, required: true },
+    author: { type: String, required: true },
+    genre: { type: String },
+    publicationDate: { type: String, required: true },
+    reviews: { type: [String], default: [] },
   },
   {
     timestamps: true,
@@ -30,4 +19,4 @@ const userSchema = new Schema<IBook>(
 );
 
 // 3. Create a Model.
-export const User = model<IBook, UserModel>('User', userSchema);
+export const Book = model<IBook, UserModel>('Book', userSchema);

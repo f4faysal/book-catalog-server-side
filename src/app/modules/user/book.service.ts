@@ -1,30 +1,19 @@
 import httpStatus from 'http-status';
 import { SortOrder } from 'mongoose';
-import config from '../../../config/index';
 import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { userSearchableFields } from './book.constant';
-import { IUser, IUserFilters } from './book.interface';
-import { User } from './book.model';
+import { IBook, IBookFilters } from './book.interface';
+import { Book } from './book.model';
 
 /**-----------------------------------------  
                 createUser start
 --------------------------------------------**/
 
-const createUser = async (user: IUser): Promise<IUser> => {
-  // default password
-  if (user.role === 'seller') {
-    (user.income = 0), (user.budget = 0);
-  }
-  if (!user.password) {
-    user.password = config.default_user_pass as string;
-  }
-  const result = await User.create(user);
-  if (!createUser) {
-    throw new Error('Failed to create user!');
-  }
+const createBook = async (book: IBook): Promise<IBook> => {
+  const result = await Book.create(book);
   return result;
 };
 
@@ -32,10 +21,10 @@ const createUser = async (user: IUser): Promise<IUser> => {
                 getallUser start
 --------------------------------------------**/
 
-const getallUser = async (
-  filters: IUserFilters,
+const getallBook = async (
+  filters: IBookFilters,
   paginationOptions: IPaginationOptions
-): Promise<IGenericResponse<IUser[]>> => {
+): Promise<IGenericResponse<IBook[]>> => {
   const { searchTerm, ...filtersData } = filters;
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(paginationOptions);
@@ -69,13 +58,13 @@ const getallUser = async (
   const whereConditions =
     andConditions.length > 0 ? { $and: andConditions } : {};
 
-  const result = await User.find(whereConditions)
+  const result = await Book.find(whereConditions)
     // .populate('academicSemester')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
 
-  const total = await User.countDocuments(whereConditions);
+  const total = await Book.countDocuments(whereConditions);
 
   return {
     meta: {
@@ -91,33 +80,33 @@ const getallUser = async (
                 getSingelUser start
 --------------------------------------------**/
 
-const getSingelUser = async (id: string): Promise<IUser | null> => {
-  const result = await User.findOne({ _id: id });
+const getSingelBook = async (id: string): Promise<IBook | null> => {
+  const result = await Book.findOne({ _id: id });
   return result;
 };
 
 /**-----------------------------------------  
-                updateUser start
+                updateBook start
 --------------------------------------------**/
 
-const updateUser = async (id: string, payload: Partial<IUser>) => {
-  const isExist = await User.findOne({ _id: id });
+const updateBook = async (id: string, payload: Partial<IBook>) => {
+  const isExist = await Book.findOne({ _id: id });
   if (!isExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User Not Fount');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Book Not Fount');
   }
 
-  const { name, ...UserData } = payload;
+  const { ...BookData } = payload;
 
-  const updateUserData: Partial<IUser> = { ...UserData };
+  const updateBookData: Partial<IBook> = { ...BookData };
 
-  if (name && Object.keys(name).length > 0) {
-    Object.keys(name).forEach(key => {
-      const nameKry = `name.${key}`;
-      (updateUserData as any)[nameKry] = name[key as keyof typeof name];
-    });
-  }
+  // if (name && Object.keys(name).length > 0) {
+  //   Object.keys(name).forEach(key => {
+  //     const nameKry = `name.${key}`;
+  //     (updateBookData as any)[nameKry] = name[key as keyof typeof name];
+  //   });
+  // }
 
-  const result = await User.findOneAndUpdate({ _id: id }, updateUserData, {
+  const result = await Book.findOneAndUpdate({ _id: id }, updateBookData, {
     new: true,
   });
 
@@ -125,18 +114,18 @@ const updateUser = async (id: string, payload: Partial<IUser>) => {
 };
 
 /**-----------------------------------------  
-                deleteUser start
+                deleteBook start
 --------------------------------------------**/
 
-const deleteUser = async (id: string): Promise<IUser | null> => {
-  const result = await User.findByIdAndDelete({ _id: id });
+const deleteBook = async (id: string): Promise<IBook | null> => {
+  const result = await Book.findByIdAndDelete({ _id: id });
   return result;
 };
 
-export const UserService = {
-  createUser,
-  getallUser,
-  getSingelUser,
-  updateUser,
-  deleteUser,
-};
+export const BookService = {
+  createBook,
+  getallBook,
+  getSingelBook,
+  updateBook,
+  deleteBook,
+}

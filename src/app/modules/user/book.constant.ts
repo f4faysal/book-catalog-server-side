@@ -1,12 +1,12 @@
 export const userSearchableFields = [
-  'Title',
-  'Author',
-  'Genre',
+  'title',
+  'author',
+  'genre',
 ];
 
-export const userFilterableFields = [
+export const bookFilterableFields = [
   'searchTerm',
-  'Title',
-  'Author',
-  'Genre',
+  'title',
+  'author',
+  'genre',
 ];
