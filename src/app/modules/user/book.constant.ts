@@ -6,7 +6,6 @@ export const userSearchableFields = [
 
 export const bookFilterableFields = [
   'searchTerm',
-  'title',
-  'author',
   'genre',
+  "publicationDate"
 ];

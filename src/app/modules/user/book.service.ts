@@ -16,6 +16,13 @@ const createBook = async (book: IBook): Promise<IBook> => {
   const result = await Book.create(book);
   return result;
 };
+const createReview = async (bookId: string, reviews: string): Promise<any> => {
+  const result = await Book.updateOne(
+    { _id: bookId },
+    { $push: { reviews } }
+  );
+  return result;
+};
 
 /**-----------------------------------------  
                 getallUser start
@@ -84,6 +91,10 @@ const getSingelBook = async (id: string): Promise<IBook | null> => {
   const result = await Book.findOne({ _id: id });
   return result;
 };
+const getaReview = async (id: string): Promise<IBook | null> => {
+  const result = await Book.findOne({ _id: id }, { reviews: 1, _id: 0 })
+  return result;
+};
 
 /**-----------------------------------------  
                 updateBook start
@@ -128,4 +139,6 @@ export const BookService = {
   getSingelBook,
   updateBook,
   deleteBook,
+  createReview,
+  getaReview
 }

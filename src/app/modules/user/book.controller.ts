@@ -20,6 +20,18 @@ const createBook = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const createReview = catchAsync(async (req: Request, res: Response) => {
+  const bookId = req.params.id;
+  const reviews = req.body.reviews;
+  const result = await BookService.createReview(bookId, reviews);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Book retrieved successfully !',
+    data: result,
+  });
+});
 
 const getallBook = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, bookFilterableFields);
@@ -42,6 +54,16 @@ const getSingelBook = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Get Single Book successfully !',
+    data: result,
+  });
+});
+const getaReview = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await BookService.getaReview(id);
+  sendResponse<IBook>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Get Book Review successfully !',
     data: result,
   });
 });
@@ -73,5 +95,8 @@ export const BookController = {
   getallBook,
   getSingelBook,
   updateBook,
+  createReview,
   deleteBook,
+  getaReview
+
 };
