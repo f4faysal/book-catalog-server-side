@@ -105,7 +105,7 @@ const updateBook = async (id: string, payload: Partial<IBook>) => {
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Book Not Fount');
   }
-
+  console.log(payload)
   const { ...BookData } = payload;
 
   const updateBookData: Partial<IBook> = { ...BookData };
